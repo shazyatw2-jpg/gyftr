@@ -120,8 +120,6 @@ class GyftrClient {
     public const USER_AGENT = "Mozilla/5.0 (Linux; Android 10; Redmi Note 9 Pro Max Build/QKQ1.191215.002; wv) "
         . "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/156.0.8078.47 Mobile Safari/537.36";
 
-    public const DEFAULT_PROXY = "http://shamenbvyt416067:nbQ7BD79kRb0xlP1_country-India@isp2.hydraproxy.com:9989";
-
     public static function getProxy(): ?string {
         $env = getenv('GYFTR_PROXY');
         if ($env !== false && $env !== '') {
@@ -130,7 +128,7 @@ class GyftrClient {
         if (defined('GYFTR_PROXY') && GYFTR_PROXY) {
             return GYFTR_PROXY;
         }
-        return self::DEFAULT_PROXY;
+        return null;
     }
 
     public static function applyProxy(array &$curlOpts): void {

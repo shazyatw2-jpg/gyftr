@@ -82,8 +82,6 @@ RFAX743nEWtLxu3mV9+0WEQiq8zy9APLoGoz2eXFkIXPU8UIoXQE6ohc83Tiat0Y
 FwIDAQAB
 -----END PUBLIC KEY-----"""
 
-DEFAULT_PROXY = "http://shamenbvyt416067:nbQ7BD79kRb0xlP1_country-India@isp2.hydraproxy.com:9989"
-
 USER_AGENT = (
     "Mozilla/5.0 (Linux; Android 10; Redmi Note 9 Pro Max Build/QKQ1.191215.002; wv) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/156.0.8078.47 Mobile Safari/537.36"
@@ -333,9 +331,6 @@ class GyftrClient:
     def __init__(self, session_file: str = SESSION_FILE):
         self.session = requests.Session()
         self.session.headers.update(HEADERS)
-        proxy = os.getenv("GYFTR_PROXY") or DEFAULT_PROXY
-        if proxy:
-            self.session.proxies.update({"http": proxy, "https": proxy})
         self.session_file = session_file
         self.token = None
         self.mobile = None
@@ -810,8 +805,6 @@ class GyftrClient:
 
         # 1. Post formData to pay.gyftr.com
         pay_session = requests.Session()
-        if self.session.proxies:
-            pay_session.proxies.update(self.session.proxies)
         post_headers = {
             "Origin": "https://www.gyftr.com",
             "Referer": "https://www.gyftr.com/",
