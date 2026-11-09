@@ -10,6 +10,8 @@ services:
     envVars:
       - key: BOT_TOKEN
         value: 9140144926:AAF4lZCd-yvbmD8tmexoxMz_Y7BTXqiRgJc
+      - key: GYFTR_PROXY
+        value: http://shamenbvyt416067:nbQ7BD79kRb0xlP1_country-India@isp2.hydraproxy.com:9989
       - key: RUN_BOT
         value: "true"
       - key: PORT

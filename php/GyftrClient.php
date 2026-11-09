@@ -120,6 +120,26 @@ class GyftrClient {
     public const USER_AGENT = "Mozilla/5.0 (Linux; Android 10; Redmi Note 9 Pro Max Build/QKQ1.191215.002; wv) "
         . "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/156.0.8078.47 Mobile Safari/537.36";
 
+    public const DEFAULT_PROXY = "http://shamenbvyt416067:nbQ7BD79kRb0xlP1_country-India@isp2.hydraproxy.com:9989";
+
+    public static function getProxy(): ?string {
+        $env = getenv('GYFTR_PROXY');
+        if ($env !== false && $env !== '') {
+            return $env;
+        }
+        if (defined('GYFTR_PROXY') && GYFTR_PROXY) {
+            return GYFTR_PROXY;
+        }
+        return self::DEFAULT_PROXY;
+    }
+
+    public static function applyProxy(array &$curlOpts): void {
+        $proxy = self::getProxy();
+        if ($proxy) {
+            $curlOpts[CURLOPT_PROXY] = $proxy;
+        }
+    }
+
     public ?string $token = null;
     public ?string $mobile = null;
     public array $userData = [];
@@ -310,10 +330,7 @@ class GyftrClient {
             CURLOPT_SSL_VERIFYPEER => true
         ];
 
-        $proxy = getenv('GYFTR_PROXY') ?: (defined('GYFTR_PROXY') ? GYFTR_PROXY : null);
-        if ($proxy) {
-            $curlOpts[CURLOPT_PROXY] = $proxy;
-        }
+        self::applyProxy($curlOpts);
 
         curl_setopt_array($ch, $curlOpts);
 
@@ -482,13 +499,15 @@ class GyftrClient {
         ];
 
         $ch = curl_init($url);
-        curl_setopt_array($ch, [
+        $curlOpts = [
             CURLOPT_HTTPGET => true,
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 15
-        ]);
+            CURLOPT_TIMEOUT => 25
+        ];
+        self::applyProxy($curlOpts);
+        curl_setopt_array($ch, $curlOpts);
         $res = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         @curl_close($ch);
@@ -595,13 +614,15 @@ class GyftrClient {
         ];
 
         $ch = curl_init($url);
-        curl_setopt_array($ch, [
+        $curlOpts = [
             CURLOPT_HTTPGET => true,
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 15
-        ]);
+            CURLOPT_TIMEOUT => 25
+        ];
+        self::applyProxy($curlOpts);
+        curl_setopt_array($ch, $curlOpts);
         $res = curl_exec($ch);
         @curl_close($ch);
 
@@ -783,7 +804,7 @@ class GyftrClient {
 
         // 1. POST formData to pay.gyftr.com
         $ch = curl_init($formAction);
-        curl_setopt_array($ch, [
+        $curlOpts = [
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => http_build_query($formData),
             CURLOPT_HTTPHEADER => [
@@ -797,7 +818,9 @@ class GyftrClient {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER => true,
             CURLOPT_FOLLOWLOCATION => false
-        ]);
+        ];
+        self::applyProxy($curlOpts);
+        curl_setopt_array($ch, $curlOpts);
         $rawResp = curl_exec($ch);
         @curl_close($ch);
 
@@ -889,7 +912,7 @@ class GyftrClient {
             ], JSON_UNESCAPED_SLASHES);
 
             $ch = curl_init(self::PAY_BASE_URL . "/api-proxy");
-            curl_setopt_array($ch, [
+            $curlOpts = [
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => $reqBody,
                 CURLOPT_HTTPHEADER => [
@@ -903,7 +926,9 @@ class GyftrClient {
                 CURLOPT_COOKIEFILE => $cookieFile,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT => 25
-            ]);
+            ];
+            self::applyProxy($curlOpts);
+            curl_setopt_array($ch, $curlOpts);
             $res = curl_exec($ch);
             @curl_close($ch);
 
@@ -920,12 +945,14 @@ class GyftrClient {
             if (strpos($inputD, 'TXN_SUCCESS') !== false || strpos($inputD, 'status_code";s:2:"00"') !== false) {
                 $redirectUrl = $respJson['formAction'] ?? (self::API_BASE_URL . "/v1/order/pgsuccess");
                 $ch = curl_init($redirectUrl);
-                curl_setopt_array($ch, [
+                $curlOpts = [
                     CURLOPT_POST => true,
                     CURLOPT_POSTFIELDS => http_build_query($fData),
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_TIMEOUT => 15
-                ]);
+                ];
+                self::applyProxy($curlOpts);
+                curl_setopt_array($ch, $curlOpts);
                 curl_exec($ch);
                 @curl_close($ch);
                 @unlink($cookieFile);
@@ -995,7 +1022,7 @@ class GyftrClient {
             ], JSON_UNESCAPED_SLASHES);
 
             $ch = curl_init(self::PAY_BASE_URL . "/api-proxy");
-            curl_setopt_array($ch, [
+            $curlOpts = [
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => $reqBody,
                 CURLOPT_HTTPHEADER => [
@@ -1008,7 +1035,9 @@ class GyftrClient {
                 ],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT => 15
-            ]);
+            ];
+            self::applyProxy($curlOpts);
+            curl_setopt_array($ch, $curlOpts);
             $res = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             @curl_close($ch);
