@@ -1,0 +1,29 @@
+# Sessions & Account Pools (Strictly Ignored)
+sessions/
+session.json
+*.session
+php/sessions/
+*.json
+!composer.json
+!package.json
+
+# Network Captures & HAR
+*.har
+
+# Backups & Archives
+*.bak
+*.zip
+*.tar.gz
+
+# Python & Cache
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+
+# Logs & Temp
+*.log
+scratch/
+.DS_Store
+Thumbs.db
