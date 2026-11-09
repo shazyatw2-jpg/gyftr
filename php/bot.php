@@ -12,7 +12,7 @@
 
 require_once __DIR__ . '/GyftrClient.php';
 
-define('BOT_TOKEN', '9140144926:AAF4lZCd-yvbmD8tmexoxMz_Y7BTXqiRgJc');
+define('BOT_TOKEN', getenv('BOT_TOKEN') ?: '9140144926:AAF4lZCd-yvbmD8tmexoxMz_Y7BTXqiRgJc');
 define('TG_API', 'https://api.telegram.org/bot' . BOT_TOKEN);
 define('SESSIONS_DIR', __DIR__ . '/sessions');
 

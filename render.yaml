@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: gyftr-suite
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    autoDeploy: true
+    healthCheckPath: /index.php
+    envVars:
+      - key: BOT_TOKEN
+        value: 9140144926:AAF4lZCd-yvbmD8tmexoxMz_Y7BTXqiRgJc
+      - key: RUN_BOT
+        value: "true"
+      - key: PORT
+        value: "10000"

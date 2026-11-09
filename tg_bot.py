@@ -52,9 +52,14 @@ except ImportError:
 
 # ─── Configuration ────────────────────────────────────────────────────────────
 
-BOT_TOKEN = "9140144926:AAF4lZCd-yvbmD8tmexoxMz_Y7BTXqiRgJc"
-SESSIONS_DIR = "/storage/emulated/0/gyftr/sessions"
-ACCOUNTS_DIR = "/storage/emulated/0/gyftr/sessions/accounts"
+BOT_TOKEN = os.getenv("BOT_TOKEN") or "9140144926:AAF4lZCd-yvbmD8tmexoxMz_Y7BTXqiRgJc"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if os.path.exists("/storage/emulated/0/gyftr/sessions"):
+    SESSIONS_DIR = "/storage/emulated/0/gyftr/sessions"
+else:
+    SESSIONS_DIR = os.getenv("SESSIONS_DIR") or os.path.join(BASE_DIR, "sessions")
+
+ACCOUNTS_DIR = os.path.join(SESSIONS_DIR, "accounts")
 os.makedirs(SESSIONS_DIR, exist_ok=True)
 os.makedirs(ACCOUNTS_DIR, exist_ok=True)
 

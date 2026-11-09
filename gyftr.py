@@ -66,7 +66,11 @@ AMAZON_MRP              = 100
 API_SECRET_KEY = "d909dg78609e47ak47diy4cf87t90c4a"
 PAY_SECRET_KEY = "gyftr2024ClientKey123456789012345"
 
-SESSION_FILE = "/storage/emulated/0/gyftr/session.json"
+SESSION_FILE = os.getenv("GYFTR_SESSION_FILE") or (
+    "/storage/emulated/0/gyftr/session.json"
+    if os.path.exists("/storage/emulated/0/gyftr")
+    else os.path.join(os.path.dirname(os.path.abspath(__file__)), "session.json")
+)
 
 PAY_RSA_PUB = """-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzFOoztxmhFYN4I6HH4mv
